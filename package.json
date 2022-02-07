@@ -1,0 +1,33 @@
+{
+  "name": "brenden-hunter",
+  "version": "1.0.0",
+  "description": "Test Update",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.7",
+    "concurrently": "^7.0.0",
+    "express-validator": "^6.14.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.2",
+    "mongoose": "^6.2.0",
+    "nodemon": "^2.0.15"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r esm server.js",
+    "server": "nodemon -r esm server.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itdev161-sp2022/brenden-hunter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itdev161-sp2022/brenden-hunter/issues"
+  },
+  "homepage": "https://github.com/itdev161-sp2022/brenden-hunter#readme"
+}
