@@ -5,10 +5,11 @@ import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
+import { response } from 'express';
 class App extends React.Component {
  
 state ={
-  data:null,
+  posts: [],
   token: null,
   user: null
 }
@@ -32,7 +33,15 @@ componentDidMount(){
 
    if(!token) {
      localStorage.removeItem('user')
-     this.setState({ user: null });
+     this.setState(
+       {
+         user: response.data.name,
+         token: token
+       },
+       () => {
+         this.loadData();
+       }
+     );
 
    }
 
@@ -54,7 +63,27 @@ componentDidMount(){
       })
    }
  }
+ loadData = () => {
+  const { token } = this.state;
 
+  if (token) {
+    const config = {
+      headers: {
+        'x-auth-token': token
+      }
+    };
+    axios
+      .get('http://localhost:5000/api/posts', config)
+      .then(response => {
+        this.setState({
+          posts: response.data
+        });
+      })
+      .catch(error => {
+        console.error(`Error fetching data: ${error}`);
+      });
+  }
+};
  logOut = () => {
    localStorage.removeItem('token');
    localStorage.removeItem('user');
@@ -63,10 +92,10 @@ componentDidMount(){
  
   render() {
 
-    let{ user, data } = this.state;
+    let{ user, posts } = this.state;
     const authProps = {
       authenticateUser: this.authenticateUser
-    }
+    };
     return (
       <Router>
       <div className="App">
@@ -89,15 +118,24 @@ componentDidMount(){
       </header>
       <main>
       <Route exact path="/">
-      {user ?
+      {user ? (
         <React.Fragment>
         <div>Hello {user}!</div>
-        <div>{data}</div>
-        </React.Fragment> :
-        <React.Fragment>
-          Please Register or Login
+        <div>
+        {posts.map(post => (
+          <div key={post._id}>
+          <h1>{post.title}</h1>
+          <p>{post.body}</p>
+          </div>
+        ))}
+        </div>
         </React.Fragment>
-      }
+    ) : (
+      <React.Fragment>Please Register or Login</React.Fragment>
+    )}
+        
+
+
       </Route>
       <Switch>
       <Route
